@@ -20,25 +20,41 @@ export class PokeAPI {
         if (cachedEntry) {
             return cachedEntry;
         }
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.statusText}`);
-        }
 
-        const locations = await response.json();
-        this.cache.add(url, locations);
+        try {
+            const response = await fetch(url);
         
-        return locations;
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.statusText}`);
+            }
+
+            const locations = await response.json();
+            this.cache.add(url, locations);
+            return locations;
+        } catch (err) {
+            throw new Error(`Error fetching locations: '${(err as Error).message}`);
+        }
     }
 
     async fetchLocation(locationName: string): Promise<Location> {
-        const response = await fetch(`PokeAPI.baseURL/location-area/${locationName}`);
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch location area '${locationName}' : ${response.statusText}`);
+        const url = `${PokeAPI.baseURL}/location-area/${locationName}`;
+        const cachedEntry = this.cache.get<Location>(url);
+        if (cachedEntry) {
+            return cachedEntry;
         }
-        return response.json();
+
+        try {
+            const response = await fetch(`PokeAPI.baseURL/location-area/${locationName}`);
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch location area '${locationName}' : ${response.statusText}`);
+            }
+            const location: Location = await response.json();
+            this.cache.add(url, location);
+            return location;
+        } catch (err) {
+            throw new Error(`Error fetching '${locationName}': ${(err as Error).message}`);
+        }
     }
 }
     
