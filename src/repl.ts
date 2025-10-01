@@ -21,8 +21,13 @@ export async function startREPL(state: State) {
                 console.log(`Unknown command: "${commandName}". Type "help" for a list of commands.`);
                 continue;
             }
-            
-            await command.callback(state);
+            if (words.length === 1) {
+                await command.callback(state);
+            } 
+            if (words.length === 2) {
+                await command.callback(state, words[1]);
+            }
+            // await command.callback(state);
             if (commandName === 'exit') {
                 break;
             }
