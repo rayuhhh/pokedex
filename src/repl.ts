@@ -15,19 +15,15 @@ export async function startREPL(state: State) {
             }
 
             const commandName = words[0];
+            const args = words.slice(1); // starts to slice arguments from command line starting at index 1
             const command = state.commands[commandName];
 
             if (!command) {
                 console.log(`Unknown command: "${commandName}". Type "help" for a list of commands.`);
                 continue;
             }
-            if (words.length === 1) {
-                await command.callback(state);
-            } 
-            if (words.length === 2) {
-                await command.callback(state, words[1]);
-            }
-            // await command.callback(state);
+            await command.callback(state, ...args);
+            
             if (commandName === 'exit') {
                 break;
             }

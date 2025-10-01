@@ -28,8 +28,8 @@ export function getCommands(): Record<string, CLICommand> {
             callback: commandMapb,
         },
         explore: {
-            name: "explore",
-            description: "Shows pokemon found in area",
+            name: "explore <location_name>",
+            description: "Explore a location by showing pokemon found in area",
             callback: commandExplore,
         }
     };
