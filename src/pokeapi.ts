@@ -176,7 +176,13 @@ export type Pokemon = {
             url: string;
         };
     }[];
-    
+    types: {
+        slot: number;
+        type: {
+            name: string;
+            url: string;
+        };
+    }[];
 }
 
 export type ShallowLocations = {
